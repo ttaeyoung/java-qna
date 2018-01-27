@@ -13,6 +13,7 @@ import support.test.AcceptanceTest;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.startsWith;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
@@ -42,7 +43,7 @@ public class LoginAcceptanceTest extends AcceptanceTest {
         assertThat(response.getStatusCode(), is(HttpStatus.FOUND));
         log.debug("body: {}", response.getBody());
         assertNotNull(userRepository.findByUserId(userId));
-        assertThat(response.getHeaders().getLocation().getPath(), containsString("/users"));
+        assertThat(response.getHeaders().getLocation().getPath(), startsWith("/users"));
 
     }
 
