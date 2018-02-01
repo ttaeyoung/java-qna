@@ -17,7 +17,7 @@ public class HomeController {
     @GetMapping("/")
     public String home(Model model) {
         Iterable<Question> questions = qnaService.findAll();
-        model.addAttribute("questions", Lists.newArrayList(questions));
+        model.addAttribute("questions", questions);
         return "home";
     }
 }

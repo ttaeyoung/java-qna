@@ -50,25 +50,21 @@ public class QnaService {
         return questionRepository.findAll(pageable).getContent();
     }
 
+    @Transactional
     public Question update(User loginUser, long id, Question updatedQuestion) {
         Question original = questionRepository.findOne(id);
-        if(!original.isOwner(loginUser)){
-            throw new UnAuthorizedException("작성자가 아닙니다.");
-        }
-
-        original.update(updatedQuestion);
-        return questionRepository.save(original);
+        original.update(loginUser, updatedQuestion);
+        return original;
     }
 
     @Transactional
     public void deleteQuestion(User loginUser, long questionId) throws CannotDeleteException {
         Question original = questionRepository.findOne(questionId);
-        if(!original.isOwner(loginUser)){
+        try{
+            original.delete(loginUser);
+        }catch(UnAuthorizedException ex){
             throw new CannotDeleteException("작성자가 아닙니다.");
         }
-
-        original.delete();
-        questionRepository.save(original);
     }
 
     public Answer addAnswer(User loginUser, long questionId, String contents) {

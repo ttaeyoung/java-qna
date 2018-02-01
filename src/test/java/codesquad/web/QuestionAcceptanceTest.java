@@ -94,17 +94,6 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
     }
 
     @Test
-    public void modify_unauthorized_user() {
-        Question question = questionRepository.findOne(2L);
-        PostRequestBuilder postBuilder = PostRequestBuilder.urlEncodedHeader();
-        postBuilder.addParam("title", "타이틀 수정주우웅");
-        postBuilder.addParam("contents", "내용도 수정주우우우웅 '- '?");
-
-        ResponseEntity<String> response = basicAuthTemplate().postForEntity(question.generateUrl(), postBuilder.build(), String.class);
-        assertThat(response.getStatusCode(), is(HttpStatus.FORBIDDEN));
-    }
-
-    @Test
     public void delete() {
         Question question = questionRepository.findOne(1L);
         basicAuthTemplate().delete(question.generateUrl());
@@ -122,17 +111,6 @@ public class QuestionAcceptanceTest extends AcceptanceTest {
         Optional<Question> questionOptional = Optional.ofNullable(questionRepository.findOne(question.getId()));
         assertThat(questionOptional.isPresent(), is(true));
         assertThat(questionOptional.get().isDeleted(), is(false));
-    }
-
-    @Test
-    public void delete_unauthorized_user() {
-        Question question = questionRepository.findOne(2L);
-        basicAuthTemplate().delete(question.generateUrl());
-
-        Optional<Question> questionOptional = Optional.ofNullable(questionRepository.findOne(question.getId()));
-        assertThat(questionOptional.isPresent(), is(true));
-        assertThat(questionOptional.get().isDeleted(), is(false));
-
     }
 
     @Test
